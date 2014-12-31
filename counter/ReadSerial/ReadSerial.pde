@@ -20,7 +20,7 @@ void setup () {
   text("Read lines:", 10, 30);
  
   try {
-    String filePath = sketchPath("../data/data.csv");
+    String filePath = sketchPath("../../data/data.csv");
     println("File path: "+filePath);
     
     File file = new File(filePath);

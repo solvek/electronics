@@ -52,7 +52,9 @@ int buttonPressed;
 void loop() {
    readDht11();
    readCO2();
- 
+   
+   sendData();
+   
   if (mode == MODE_HOME)
   {
     showHome();
@@ -301,4 +303,20 @@ void writeWord(int address, int w)
   
   EEPROM.write(address, (byte)w);
   EEPROM.write(address+1, (byte)(w>>8));
+}
+
+int oldSensor, oldTemp, oldHum;
+void sendData(){
+  if (oldSensor == sensorValue && oldTemp == DHT11.temperature && oldHum == DHT11.humidity) return;
+  
+   Serial.print("$data:");   
+   Serial.print(sensorValue);
+   Serial.print(",");
+   Serial.print(DHT11.temperature);
+   Serial.print(",");
+   Serial.println(DHT11.humidity);
+  
+   oldSensor = sensorValue;
+   oldTemp = DHT11.temperature;
+   oldHum = DHT11.humidity;
 }
