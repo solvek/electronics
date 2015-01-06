@@ -1,4 +1,4 @@
-# setwd("file:///home/solvek/projects/electronics/counter/data")
+# setwd("/home/solvek/projects/electronics/counter/data")
 # source("../plotchart.R")
 
 # File with data
