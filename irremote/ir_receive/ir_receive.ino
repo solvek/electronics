@@ -82,12 +82,9 @@ void printpulses(void) {
   Serial.println("A new signal received");
   
   for (uint8_t i = 0; i < currentpulse; i++) {
-//    Serial.print("delayMicroseconds(");    
-//    Serial.print(pulses[i][0] * RESOLUTION, DEC);
-//    Serial.println(");");
-//    Serial.print("pulseIR(");
-//    Serial.print(pulses[i][1] * RESOLUTION, DEC);
-//    Serial.println(");");
+//    Serial.println(pulses[i][0] * RESOLUTION, DEC);
+//    Serial.println(pulses[i][1] * RESOLUTION, DEC);
+
     Serial.print(pulses[i][0] * RESOLUTION, DEC);
     Serial.print("|");
     Serial.println(pulses[i][1] * RESOLUTION, DEC);
