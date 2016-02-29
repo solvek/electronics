@@ -1,10 +1,16 @@
+# Useful information
+
+ * OpenHab default location: `/opt/openhab`
+ * [OpenHab](http://www.openhab.org/getting-started/) starting: `./start_debug.sh`
+ * [OpenHab url](http://localhost:8080) or [demo sitemap](http://localhost:8080/openhab.app?sitemap=demo)
+
 # Used modules
 
  * Arduino UNO
  * Etehrnet
  * CO2 Sensor
  * Temperature and humidity sensor [DHT11](http://playground.arduino.cc/Main/DHT11Lib)
- * Pressure sensor [BMP180](https://www.adafruit.com/products/1603), [library](https://learn.sparkfun.com/tutorials/bmp180-barometric-pressure-sensor-hookup-/installing-the-arduino-library)
+ * Pressure sensor [BMP180](https://www.adafruit.com/products/1603), [library]( )
 
 # Used libraries
 
