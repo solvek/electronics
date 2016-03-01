@@ -10,16 +10,123 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     21834,        575]
-NotebookOptionsPosition[     20848,        535]
-NotebookOutlinePosition[     21186,        550]
-CellTagsIndexPosition[     21143,        547]
+NotebookDataLength[     25498,        694]
+NotebookOptionsPosition[     24180,        642]
+NotebookOutlinePosition[     24518,        657]
+CellTagsIndexPosition[     24475,        654]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
 Notebook[{
 
 Cell[CellGroupData[{
+Cell[BoxData[
+ RowBox[{"\:0441", "=", 
+  SuperscriptBox["\[ExponentialE]", 
+   FractionBox[
+    RowBox[{"s", "+", "a"}], "b"]]}]], "Input",
+ CellChangeTimes->{{3.665750423664064*^9, 3.6657504463155518`*^9}}],
+
+Cell[BoxData[
+ SuperscriptBox["\[ExponentialE]", 
+  FractionBox[
+   RowBox[{"a", "+", "s"}], "b"]]], "Output",
+ CellChangeTimes->{3.665750455477841*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Solve", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"c", "==", 
+      SuperscriptBox["\[ExponentialE]", 
+       FractionBox[
+        RowBox[{"s", "+", "a"}], "b"]]}], ",", " ", 
+     RowBox[{
+      RowBox[{"a", "-", "a0"}], "\[Equal]", 
+      FractionBox[
+       RowBox[{"b0", "-", "b"}], 
+       RowBox[{"Log", "[", "c", "]"}]]}]}], "}"}], ",", " ", 
+   RowBox[{"{", 
+    RowBox[{"a", ",", "b"}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.665750544561161*^9, 3.665750578387356*^9}, {
+  3.66575242281466*^9, 3.665752511712069*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"a", "\[Rule]", 
+     RowBox[{"ConditionalExpression", "[", 
+      RowBox[{
+       RowBox[{"-", 
+        FractionBox[
+         RowBox[{"s", "-", 
+          RowBox[{"b0", " ", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"2", " ", "\[ImaginaryI]", " ", "\[Pi]", " ", 
+              RowBox[{"C", "[", "1", "]"}]}], "+", 
+             RowBox[{"Log", "[", "c", "]"}]}], ")"}]}], "-", 
+          RowBox[{"a0", " ", 
+           RowBox[{"Log", "[", "c", "]"}], " ", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"2", " ", "\[ImaginaryI]", " ", "\[Pi]", " ", 
+              RowBox[{"C", "[", "1", "]"}]}], "+", 
+             RowBox[{"Log", "[", "c", "]"}]}], ")"}]}]}], 
+         RowBox[{"1", "+", 
+          RowBox[{
+           RowBox[{"Log", "[", "c", "]"}], " ", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"2", " ", "\[ImaginaryI]", " ", "\[Pi]", " ", 
+              RowBox[{"C", "[", "1", "]"}]}], "+", 
+             RowBox[{"Log", "[", "c", "]"}]}], ")"}]}]}]]}], ",", 
+       RowBox[{
+        RowBox[{"C", "[", "1", "]"}], "\[Element]", "Integers"}]}], "]"}]}], 
+    ",", 
+    RowBox[{"b", "\[Rule]", 
+     RowBox[{"ConditionalExpression", "[", 
+      RowBox[{
+       RowBox[{"-", 
+        FractionBox[
+         RowBox[{
+          RowBox[{"-", "b0"}], "-", 
+          RowBox[{"a0", " ", 
+           RowBox[{"Log", "[", "c", "]"}]}], "-", 
+          RowBox[{"s", " ", 
+           RowBox[{"Log", "[", "c", "]"}]}]}], 
+         RowBox[{"1", "+", 
+          RowBox[{
+           RowBox[{"Log", "[", "c", "]"}], " ", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"2", " ", "\[ImaginaryI]", " ", "\[Pi]", " ", 
+              RowBox[{"C", "[", "1", "]"}]}], "+", 
+             RowBox[{"Log", "[", "c", "]"}]}], ")"}]}]}]]}], ",", 
+       RowBox[{
+        RowBox[{"C", "[", "1", "]"}], "\[Element]", "Integers"}]}], "]"}]}]}],
+    "}"}], "}"}]], "Output",
+ CellChangeTimes->{3.665752512358148*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ SuperscriptBox["\[ExponentialE]", 
+  RowBox[{"Log", "[", "c", "]"}]]], "Input",
+ CellChangeTimes->{{3.665750660707555*^9, 3.665750665185998*^9}}],
+
+Cell[BoxData["c"], "Output",
+ CellChangeTimes->{3.66575066593635*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
 Cell[BoxData[
  RowBox[{"N", "[", 
   RowBox[{"Solve", "[", 
@@ -534,7 +641,7 @@ Cell[BoxData["1.5960241084694972`*^6"], "Output",
 }, Open  ]]
 },
 WindowSize->{808, 911},
-WindowMargins->{{79, Automatic}, {-18, Automatic}},
+WindowMargins->{{69, Automatic}, {-10, Automatic}},
 FrontEndVersion->"10.0 for Linux x86 (64-bit) (December 4, 2014)",
 StyleDefinitions->"Default.nb"
 ]
@@ -550,32 +657,44 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[580, 22, 1452, 35, 71, "Input"],
-Cell[2035, 59, 650, 13, 89, "Output"]
+Cell[580, 22, 207, 5, 43, "Input"],
+Cell[790, 29, 152, 4, 40, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[2722, 77, 478, 13, 41, "Input"],
-Cell[3203, 92, 163, 2, 32, "Output"]
+Cell[979, 38, 577, 17, 59, "Input"],
+Cell[1559, 57, 2047, 56, 186, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[3403, 99, 316, 9, 41, "Input"],
-Cell[3722, 110, 429, 12, 50, "Output"]
+Cell[3643, 118, 160, 3, 34, "Input"],
+Cell[3806, 123, 69, 1, 32, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[4188, 127, 821, 23, 55, "Input"],
-Cell[5012, 152, 6051, 161, 158, "Output"]
+Cell[3912, 129, 1452, 35, 71, "Input"],
+Cell[5367, 166, 650, 13, 32, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[11100, 318, 589, 16, 57, "Input"],
-Cell[11692, 336, 368, 12, 52, "Output"]
+Cell[6054, 184, 478, 13, 41, "Input"],
+Cell[6535, 199, 163, 2, 32, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[12097, 353, 1407, 32, 92, "Input"],
-Cell[13507, 387, 6512, 116, 238, "Output"]
+Cell[6735, 206, 316, 9, 41, "Input"],
+Cell[7054, 217, 429, 12, 50, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[20056, 508, 660, 21, 85, "Input"],
-Cell[20719, 531, 113, 1, 34, "Output"]
+Cell[7520, 234, 821, 23, 55, "Input"],
+Cell[8344, 259, 6051, 161, 158, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[14432, 425, 589, 16, 57, "Input"],
+Cell[15024, 443, 368, 12, 52, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[15429, 460, 1407, 32, 92, "Input"],
+Cell[16839, 494, 6512, 116, 238, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[23388, 615, 660, 21, 85, "Input"],
+Cell[24051, 638, 113, 1, 34, "Output"]
 }, Open  ]]
 }
 ]

@@ -7,10 +7,10 @@
 # Used modules
 
  * Arduino UNO
- * Etehrnet
- * CO2 Sensor
+ * Etehrnet on chip ENC28J60
+ * CO2 Sensor TGS4161
  * Temperature and humidity sensor [DHT11](http://playground.arduino.cc/Main/DHT11Lib)
- * Pressure sensor [BMP180](https://www.adafruit.com/products/1603), [library]( )
+ * Voltage stabilizator l7805cv. [Connection scheme]  (http://www.ruselectronic.com/news/stabilizatory-naprjazhjenija/)
 
 # Used libraries
 

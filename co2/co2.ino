@@ -24,8 +24,6 @@ char response[100];
 
 int runId, sensorValue=-1,temperature, humidity;
 
-float alpha = 0.96;
-
 dht11 DHT11;
 
 #define DHT11PIN 2
@@ -52,7 +50,7 @@ void setup() {
 
 word len, pos;
 void loop() {
-  delay(10*60*1000);
+  delay(5000);
   
   readCO2();
   readDh11();
@@ -62,10 +60,10 @@ void loop() {
   Serial.print(", co2 sensor:");
   Serial.println(sensorValue);
   
-  Serial.print("Humidity (%): ");
-  Serial.print(humidity, 2);
-  Serial.print(", Temperature (°C): ");
-  Serial.println(temperature, 2);
+  Serial.print("Humidity(%): ");
+  Serial.print(humidity);
+  Serial.print(", Temperature(°C): ");
+  Serial.println(temperature);
   
   String s = String("meteostation;");
   s.concat(runId);
@@ -83,15 +81,18 @@ void loop() {
   ether.sendUdp(response, s.length(), srcPort, ether.hisip, dstPort);   
 }
 
+const int TRIES = 10;
+
 void readCO2()
 {
-   for (int i = 0; i < 4; i++)
+   sensorValue = 0;
+   analogRead(CO2PIN);
+   for (int i = 0; i < TRIES; i++)
    {
-     sensorValue = (sensorValue == -1) 
-       ? analogRead(CO2PIN)
-       : sensorValue*alpha + analogRead(CO2PIN)*(1-alpha);
+     sensorValue += analogRead(CO2PIN);
      delay(20);
    }
+   sensorValue /= TRIES;
 }
 
 void readDh11(){
