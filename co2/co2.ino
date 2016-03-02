@@ -65,7 +65,7 @@ void loop() {
   Serial.print(", Temperature(°C): ");
   Serial.println(temperature);
   
-  String s = String("meteostation;");
+  String s = String("meteostationZ");
   s.concat(runId);
   s.concat(";");
   s.concat(sensorValue);
@@ -73,7 +73,11 @@ void loop() {
   s.concat(temperature);
   s.concat(";");
   s.concat(humidity);
+  s.concat("Z");
   s.toCharArray(response, s.length()+1);
+
+  Serial.print("String size: ");
+  Serial.println(s.length());
   
   Serial.print("Sending to udp:");
   Serial.println(s);
@@ -102,17 +106,17 @@ void readDh11(){
   switch (chk)
   {
     case DHTLIB_OK: 
-		Serial.println("OK"); 
-		break;
+    Serial.println("OK"); 
+    break;
     case DHTLIB_ERROR_CHECKSUM: 
-		Serial.println("Checksum error"); 
-		break;
+    Serial.println("Checksum error"); 
+    break;
     case DHTLIB_ERROR_TIMEOUT: 
-		Serial.println("Time out error"); 
-		break;
+    Serial.println("Time out error"); 
+    break;
     default: 
-		Serial.println("Unknown error"); 
-		break;
+    Serial.println("Unknown error"); 
+    break;
   }
   
   humidity = DHT11.humidity;
