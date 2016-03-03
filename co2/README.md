@@ -6,7 +6,7 @@
 
 # Used modules
 
-![Wiring](/Meteostation_schem.png)
+![Wiring](Meteostation_schem.png)
 
 [Wiring in fritzing format](/Meteostation.fzz)
 
@@ -18,7 +18,7 @@
 
 ![Module scheme](/TGS4161.jpg)
 
- * [Product information](/tgs4161.pdf)
+ * [Product information](tgs4161.pdf)
  * [TGS4161 DataSheet](/TGS4161Dtl.pdf)
 
  This module can mesure [PPM](https://en.wikipedia.org/wiki/Parts-per_notation#ppm) ("parts per million" - co2 concentration value) from 350 to 10000 ppm. [Read](https://en.wikipedia.org/wiki/Carbon_dioxide#Toxicity) about CO2 toxity for humans.
@@ -31,9 +31,9 @@
 
   For arduino if `s` is signal then voltage `v` will be `v=(s*5000)/1024`. So having two different `v1` and `v2` and corresponding concentrations `c1` and `c2` we can find:
 
-   * Let z1 = Ln(c1), z2 = Ln(c2), d=z1-z2
-   * a = (v1*z2-v2*z1)/d
-   * b = (v1-v2)/d
+   * Let `z1 = Ln(c1)`, `z2 = Ln(c2)`, `d=z1-z2`
+   * `a = (v1*z2-v2*z1)/d`
+   * `b = (v1-v2)/d`
 
    [Calculation in instacalc](http://instacalc.com/40408)
 
