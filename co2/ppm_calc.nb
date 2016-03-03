@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     25498,        694]
-NotebookOptionsPosition[     24180,        642]
-NotebookOutlinePosition[     24518,        657]
-CellTagsIndexPosition[     24475,        654]
+NotebookDataLength[     27563,        759]
+NotebookOptionsPosition[     26087,        702]
+NotebookOutlinePosition[     26426,        717]
+CellTagsIndexPosition[     26383,        714]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -638,10 +638,70 @@ Cell[BoxData[
 
 Cell[BoxData["1.5960241084694972`*^6"], "Output",
  CellChangeTimes->{{3.665406816164319*^9, 3.6654068286316*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Solve", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"c1", "\[Equal]", 
+      SuperscriptBox["\[ExponentialE]", 
+       RowBox[{"b", " ", 
+        RowBox[{"(", 
+         RowBox[{"v1", "+", "a"}], ")"}]}]]}], ",", 
+     RowBox[{"c2", "\[Equal]", 
+      SuperscriptBox["\[ExponentialE]", 
+       RowBox[{"b", " ", 
+        RowBox[{"(", 
+         RowBox[{"v2", "+", "a"}], ")"}]}]]}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"a", ",", "b"}], "}"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.6659826944411507`*^9, 3.665982752958406*^9}, {
+  3.665983868952539*^9, 3.665983899926557*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Solve", "::", "ifun"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Inverse functions are being used by \
+\[NoBreak]\\!\\(Solve\\)\[NoBreak], so some solutions may not be found; use \
+Reduce for complete solution information. \\!\\(\\*ButtonBox[\\\"\
+\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", ButtonFrame->None, \
+ButtonData:>\\\"paclet:ref/message/Solve/ifun\\\", ButtonNote -> \
+\\\"Solve::ifun\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.6659839006274843`*^9}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"a", "\[Rule]", 
+     FractionBox[
+      RowBox[{
+       RowBox[{
+        RowBox[{"-", "v2"}], " ", 
+        RowBox[{"Log", "[", "c1", "]"}]}], "+", 
+       RowBox[{"v1", " ", 
+        RowBox[{"Log", "[", "c2", "]"}]}]}], 
+      RowBox[{
+       RowBox[{"Log", "[", "c1", "]"}], "-", 
+       RowBox[{"Log", "[", "c2", "]"}]}]]}], ",", 
+    RowBox[{"b", "\[Rule]", 
+     FractionBox[
+      RowBox[{
+       RowBox[{"Log", "[", "c1", "]"}], "-", 
+       RowBox[{"Log", "[", "c2", "]"}]}], 
+      RowBox[{"v1", "-", "v2"}]]}]}], "}"}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.665982753354533*^9, {3.665983896037616*^9, 3.66598390063008*^9}}]
 }, Open  ]]
 },
 WindowSize->{808, 911},
-WindowMargins->{{69, Automatic}, {-10, Automatic}},
+WindowMargins->{{Automatic, 754}, {-57, Automatic}},
 FrontEndVersion->"10.0 for Linux x86 (64-bit) (December 4, 2014)",
 StyleDefinitions->"Default.nb"
 ]
@@ -662,7 +722,7 @@ Cell[790, 29, 152, 4, 40, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
 Cell[979, 38, 577, 17, 59, "Input"],
-Cell[1559, 57, 2047, 56, 186, "Output"]
+Cell[1559, 57, 2047, 56, 129, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
 Cell[3643, 118, 160, 3, 34, "Input"],
@@ -695,6 +755,11 @@ Cell[16839, 494, 6512, 116, 238, "Output"]
 Cell[CellGroupData[{
 Cell[23388, 615, 660, 21, 85, "Input"],
 Cell[24051, 638, 113, 1, 34, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[24201, 644, 624, 18, 37, "Input"],
+Cell[24828, 664, 533, 11, 41, "Message"],
+Cell[25364, 677, 707, 22, 109, "Output"]
 }, Open  ]]
 }
 ]

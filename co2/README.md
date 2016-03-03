@@ -2,13 +2,17 @@
 
 ![Wiring](Meteostation_schem.png)
 
-[Wiring in fritzing format](Meteostation.fzz)
-
 ## Arduino UNO
+
+[The sketch to bind everything.](meteostation.ino)
 
 ##  Ethernet on chip ENC28J60
 
-[Library](https://github.com/jcw/ethercard)
+All sensor values are sent via UDP periodically in form: `meteostationZval1;val2;val3;val4Z`
+
+[EtherCard Library](https://github.com/jcw/ethercard)
+
+![ENC28J60 wiring](ENC28J60_schem.png)
 
 ## CO2 Sensor TGS4161
 
@@ -31,18 +35,24 @@
    * `a = (v1*z2-v2*z1)/d`
    * `b = (v1-v2)/d`
 
-   [Calculation in instacalc](http://instacalc.com/40408)
+[Calculation in instacalc](http://instacalc.com/40408)
 
-## Temperature and humidity sensor [DHT11](http://playground.arduino.cc/Main/DHT11Lib)
+![TGS4161 wiring](tgs4161_schem.png)
 
-![Module scheme](dht11.jpg)
+## Temperature and humidity sensor [DHT11](https://github.com/adafruit/DHT-sensor-library)
+
+[DHT11 Library](http://playground.arduino.cc/Main/DHT11Lib)
+
+![DHT11 Module photo](dht11.jpg)
+
+![DHT11 wiring](dht11_schem.png)
 
 ## Presure sensor BMP180
 Can measure pressure, temperature and altitude.
 
 [MMP180 Library](https://github.com/sparkfun/BMP180_Breakout_Arduino_Library)
 
-![BMP180 wiring](BMP180_pin_arduino.png)
+![BMP180 wiring](bmp180_schem.png)
 
 ## Voltage stabilizator LM7805CV. [Connection scheme](http://www.ruselectronic.com/news/stabilizatory-naprjazhjenija/)
 
