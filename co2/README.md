@@ -57,9 +57,78 @@ Can measure pressure, temperature and altitude.
 ## Items `solvek.items`
 
 ```
+/* Meteostation */
+Group Meteostation  (All)
 
+Number MS_Temperature    "Temperature [%d °C]"  <temperature> (Meteostation)
+Number MS_Humidity   "Humidity [%d %%]"  <temperature> (Meteostation)
+
+Group MS_Advanced  (Meteostation)
+Number MS_CO2_Raw   "CO2 raw [%d]"  (MS_Advanced)
+String  String_MS_raw     "Raw udp [%s]"   (MS_Advanced) {udp="<[0.0.0.0:*:'REGEX(meteostation;(.*))']"}
+Number CO2_Raw_Chart_Period   "Chart Period"
 ```
 
 ## Sitemap `default.sitemap`
 
+```
+  Frame label="Meteostation"{
+    Text item=MS_Temperature   {
+      Chart item=MS_Temperature period=D refresh=30000
+    }
+    Text item=MS_Humidity
+
+    Text label="Advanced" {
+        Text item=MS_CO2_Raw
+
+        Switch item=CO2_Raw_Chart_Period label="Chart Period" mappings=[0="Hour", 1="Day", 2="Week"]
+        Chart item=MS_CO2_Raw period=h refresh=6000 visibility=[CO2_Raw_Chart_Period==0, CO2_Raw_Chart_Period=="Uninitialized"]
+        Chart item=MS_CO2_Raw period=D refresh=30000 visibility=[CO2_Raw_Chart_Period==1]
+        Chart item=MS_CO2_Raw period=W refresh=30000 visibility=[CO2_Raw_Chart_Period==2]
+
+        Text item=String_MS_raw
+    }
+  }
+  ```
+
 ## Rules `solvek.rules`
+
+```
+// Solvek rules
+rule "Parse raw meteostation"
+when
+  Item String_MS_raw received update
+then
+  val String ms_val = String_MS_raw.state.toString
+
+  executeCommandLine(String::format("/media/data/big_storage/Projects/electronics/co2/append.sh %2$s;%1$s /media/data/big_storage/Temp/meteostation.csv", ms_val, now))
+  logInfo("mscsv", ms_val)
+
+  val String[] parts = ms_val.split(";")
+
+  var Number temperature = Integer::parseInt(parts.get(2))
+  sendCommand(MS_Temperature, temperature)
+
+  var Number humidity = Integer::parseInt(parts.get(3))
+  postUpdate(MS_Humidity, humidity)
+
+  var Number co2_raw = Integer::parseInt(parts.get(1))
+  postUpdate(MS_CO2_Raw, co2_raw)
+  ```
+
+  ## `rrd4j.persist`
+
+  ```
+  // persistence strategies have a name and a definition and are referred to in the "Items" section
+Strategies {
+  // for rrd charts, we need a cron strategy
+  everyMinute : "0 * * * * ?"
+}
+
+Items {
+  MS_CO2_Raw,MS_Temperature,DemoSwitch,NoOfLights,Window_GF_Toilet,Heating* : strategy = everyChange, everyMinute, restoreOnStartup
+
+  // let's only store temperature values in rrd
+  Temperature*,Weather_Chart* : strategy = everyMinute, restoreOnStartup
+}
+```
