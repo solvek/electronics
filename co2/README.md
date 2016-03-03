@@ -116,7 +116,7 @@ then
   postUpdate(MS_CO2_Raw, co2_raw)
   ```
 
-  ## `rrd4j.persist`
+## `rrd4j.persist`
 
   ```
   // persistence strategies have a name and a definition and are referred to in the "Items" section
