@@ -1,25 +1,21 @@
-# Useful information
-
- * OpenHab default location: `/opt/openhab`
- * [OpenHab](http://www.openhab.org/getting-started/) starting: `./start_debug.sh`
- * [OpenHab url](http://localhost:8080) or [demo sitemap](http://localhost:8080/openhab.app?sitemap=demo)
-
 # Used modules
 
 ![Wiring](Meteostation_schem.png)
 
-[Wiring in fritzing format](/Meteostation.fzz)
+[Wiring in fritzing format](Meteostation.fzz)
 
 ## Arduino UNO
 
 ##  Ethernet on chip ENC28J60
 
+[Library](https://github.com/jcw/ethercard)
+
 ## CO2 Sensor TGS4161
 
-![Module scheme](/TGS4161.jpg)
+![Module scheme](TGS4161.jpg)
 
  * [Product information](tgs4161.pdf)
- * [TGS4161 DataSheet](/TGS4161Dtl.pdf)
+ * [TGS4161 DataSheet](TGS4161Dtl.pdf)
 
  This module can mesure [PPM](https://en.wikipedia.org/wiki/Parts-per_notation#ppm) ("parts per million" - co2 concentration value) from 350 to 10000 ppm. [Read](https://en.wikipedia.org/wiki/Carbon_dioxide#Toxicity) about CO2 toxity for humans.
 
@@ -39,20 +35,31 @@
 
 ## Temperature and humidity sensor [DHT11](http://playground.arduino.cc/Main/DHT11Lib)
 
-![Module scheme](/dht11.jpg)
+![Module scheme](dht11.jpg)
 
 ## Presure sensor BMP180
 Can measure pressure, temperature and altitude.
 
 [MMP180 Library](https://github.com/sparkfun/BMP180_Breakout_Arduino_Library)
 
-![BMP180 wiring](/BMP180_pin_arduino.png)
+![BMP180 wiring](BMP180_pin_arduino.png)
 
 ## Voltage stabilizator LM7805CV. [Connection scheme](http://www.ruselectronic.com/news/stabilizatory-naprjazhjenija/)
 
-![input/output](/lm7805.jpg)
+![input/output](lm7805.jpg)
 
-# Used libraries
+# OpenHab
 
- * [EtherCard](http://jeelabs.org/pub/docs/ethercard/) ([sources](https://github.com/jcw/ethercard))
- * Library for timing [Metro](https://github.com/thomasfredericks/Metro-Arduino-Wiring)
+ * OpenHab default location: `/opt/openhab`
+ * [OpenHab](http://www.openhab.org/getting-started/) starting: `./start_debug.sh`
+ * [OpenHab url](http://localhost:8080) or [demo sitemap](http://localhost:8080/openhab.app?sitemap=demo)
+
+## Items `solvek.items`
+
+```
+
+```
+
+## Sitemap `default.sitemap`
+
+## Rules `solvek.rules`
