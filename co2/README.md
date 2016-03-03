@@ -1,7 +1,5 @@
 # Used modules
 
-![Wiring](Meteostation_schem.png)
-
 ## Arduino UNO
 
 [The sketch to bind everything.](meteostation.ino)
