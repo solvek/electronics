@@ -1,4 +1,6 @@
 #include <EtherCard.h>
+#include <SFE_BMP180.h>
+#include <Wire.h>
 #include "dht11.h"
 
 //#define STATIC 1  // set to 1 to disable DHCP (adjust myip/gwip values below)
@@ -21,12 +23,13 @@ const int srcPort PROGMEM = 4321;
 char response[100];
 
 #define CO2PIN A3
+#define DHT11PIN 2
 
 int runId, sensorValue=-1,temperature, humidity;
+double pressure, temperature2;
 
 dht11 DHT11;
-
-#define DHT11PIN 2
+SFE_BMP180 bmp;
 
 void setup() {
   Serial.begin(57600);
@@ -46,6 +49,10 @@ void setup() {
   ether.printIp("IP:  ", ether.myip);
   ether.printIp("GW:  ", ether.gwip);  
   ether.printIp("DNS: ", ether.dnsip);
+  
+  if (!bmp.begin()) {
+    Serial.println("Could not find a valid BMP180 sensor, check wiring!");
+  }
 }
 
 word len, pos;
@@ -54,25 +61,24 @@ void loop() {
   
   readCO2();
   readDh11();
-
-  Serial.print("RunId: ");    
-  Serial.print(runId);
-  Serial.print(", co2 sensor:");
-  Serial.println(sensorValue);
-  
-  Serial.print("Humidity(%): ");
-  Serial.print(humidity);
-  Serial.print(", Temperature(°C): ");
-  Serial.println(temperature);
-  
+  readBmp180();
+ 
   String s = String("meteostationZ");
   s.concat(runId);
   s.concat(";");
+
   s.concat(sensorValue);
   s.concat(";");
+
   s.concat(temperature);
   s.concat(";");
   s.concat(humidity);
+  s.concat(";");
+
+  s.concat(temperature2);
+  s.concat(";");
+  s.concat(pressure);
+
   s.concat("Z");
   s.toCharArray(response, s.length()+1);
 
@@ -97,6 +103,11 @@ void readCO2()
      delay(20);
    }
    sensorValue /= TRIES;
+   
+  Serial.print("RunId: ");    
+  Serial.print(runId);
+  Serial.print(", co2 sensor:");
+  Serial.println(sensorValue);
 }
 
 void readDh11(){
@@ -121,4 +132,48 @@ void readDh11(){
   
   humidity = DHT11.humidity;
   temperature = DHT11.temperature;
+  
+  Serial.print("Humidity(%): ");
+  Serial.print(humidity);
+  Serial.print(", Temperature(°C): ");
+  Serial.println(temperature);
+}
+
+void readBmp180(){
+  char status = bmp.startTemperature();
+  if (status == 0){
+    Serial.println("error starting temperature measurement");
+    return;
+  }
+  
+  delay(status);
+  
+  status = bmp.getTemperature(temperature2);
+  if (status == 0){
+    Serial.println("error retrieving temperature measurement\n");
+    return;
+  }   
+  
+  Serial.print("Temperature = ");
+  Serial.print(temperature2);
+  Serial.print(" *C, ");
+  
+  status = bmp.startPressure(3);
+  if (status == 0){
+    Serial.println("error starting pressure measurement\n");
+    return;
+  }
+  
+  delay(status);
+  
+  status = bmp.getPressure(pressure,temperature2);
+  
+  if (status == 0){
+    Serial.println("error retrieving pressure measurement\n");
+    return;
+  }
+  
+  Serial.print("Pressure = ");
+  Serial.print(pressure);
+  Serial.println(" mb");  
 }
