@@ -37,11 +37,11 @@ All sensor values are sent via UDP periodically in form: `meteostationZval1;val2
 
 ![TGS4161 wiring](tgs4161_schem.png)
 
-## Temperature and humidity sensor [DHT11](https://github.com/adafruit/DHT-sensor-library)
+## Temperature and humidity sensor DHT11
 
-[DHT11 Library](http://playground.arduino.cc/Main/DHT11Lib)
+[DHT11 Library](https://github.com/adafruit/DHT-sensor-library)
 
-![DHT11 Module photo](dht11.jpg)
+![DHT11 Module photo](weather_dhtwiring.gif)
 
 ![DHT11 wiring](dht11_schem.png)
 
