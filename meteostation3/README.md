@@ -8,6 +8,8 @@
 
 All sensor values are sent via UDP periodically in form: `meteostationZval1;val2;val3;val4Z`
 
+There is also [node.js script](udpserver.js) which listens for messages from meteostaion.
+
 [EtherCard Library](https://github.com/jcw/ethercard)
 
 ![ENC28J60 wiring](ENC28J60_schem.png)
