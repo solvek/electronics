@@ -2,7 +2,7 @@
 
 ## Arduino UNO
 
-[The sketch to bind everything.](meteostation.ino)
+[The sketch to bind everything.](meteostation3.ino)
 
 ##  Ethernet on chip ENC28J60
 

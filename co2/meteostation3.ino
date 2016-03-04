@@ -105,7 +105,7 @@ void readCO2()
      sensorValue += analogRead(CO2PIN);
      delay(20);
    }
-   sensorValue /= TRIES;
+   sensorValue = (sensorValue*5000.0)/(1024.0*TRIES);
 }
 
 void readDht11(){
