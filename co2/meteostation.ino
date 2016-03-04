@@ -1,7 +1,7 @@
 #include <EtherCard.h>
 #include <SFE_BMP180.h>
 #include <Wire.h>
-#include "dht11.h"
+#include "DHT.h"
 
 //#define STATIC 1  // set to 1 to disable DHCP (adjust myip/gwip values below)
 //
@@ -22,19 +22,21 @@ const int srcPort PROGMEM = 4321;
 
 char response[100];
 
-#define CO2PIN A3
-#define DHT11PIN 2
+#define CO2PIN A0
+#define DHTPIN 2
 
-int runId, sensorValue=-1,temperature, humidity;
+#define DHTTYPE DHT11
+
+int runId, sensorValue=-1, temperature, humidity;
 double pressure, temperature2;
 
-dht11 DHT11;
+DHT dht(DHTPIN, DHTTYPE);
 SFE_BMP180 bmp;
 
 void setup() {
   Serial.begin(57600);
 
-  randomSeed(analogRead(0));  
+  randomSeed(analogRead(2));  
   runId = random(0,10000);
   
   if (ether.begin(sizeof Ethernet::buffer, mymac) == 0) 
@@ -53,14 +55,15 @@ void setup() {
   if (!bmp.begin()) {
     Serial.println("Could not find a valid BMP180 sensor, check wiring!");
   }
+
+  dht.begin();
 }
 
-word len, pos;
 void loop() {
   delay(5000);
   
   readCO2();
-  readDh11();
+  readDht11();
   readBmp180();
  
   String s = String("meteostationZ");
@@ -103,40 +106,21 @@ void readCO2()
      delay(20);
    }
    sensorValue /= TRIES;
-   
-  Serial.print("RunId: ");    
-  Serial.print(runId);
-  Serial.print(", co2 sensor:");
-  Serial.println(sensorValue);
 }
 
-void readDh11(){
-  int chk = DHT11.read(DHT11PIN);
-
-  Serial.print("Read dht11 sensor: ");
-  switch (chk)
-  {
-    case DHTLIB_OK: 
-    Serial.println("OK"); 
-    break;
-    case DHTLIB_ERROR_CHECKSUM: 
-    Serial.println("Checksum error"); 
-    break;
-    case DHTLIB_ERROR_TIMEOUT: 
-    Serial.println("Time out error"); 
-    break;
-    default: 
-    Serial.println("Unknown error"); 
-    break;
+void readDht11(){
+    
+  humidity = dht.readHumidity();
+  if (isnan(humidity)) {
+    humidity = 0;
+    Serial.println("Failed to read humidity from DHT sensor!");
   }
   
-  humidity = DHT11.humidity;
-  temperature = DHT11.temperature;
-  
-  Serial.print("Humidity(%): ");
-  Serial.print(humidity);
-  Serial.print(", Temperature(°C): ");
-  Serial.println(temperature);
+  temperature = dht.readTemperature();
+  if (isnan(temperature)) {
+    temperature = 0;
+    Serial.println("Failed to read temperature from DHT sensor!");
+  }
 }
 
 void readBmp180(){
@@ -152,11 +136,7 @@ void readBmp180(){
   if (status == 0){
     Serial.println("error retrieving temperature measurement\n");
     return;
-  }   
-  
-  Serial.print("Temperature = ");
-  Serial.print(temperature2);
-  Serial.print(" *C, ");
+  }
   
   status = bmp.startPressure(3);
   if (status == 0){
@@ -171,9 +151,5 @@ void readBmp180(){
   if (status == 0){
     Serial.println("error retrieving pressure measurement\n");
     return;
-  }
-  
-  Serial.print("Pressure = ");
-  Serial.print(pressure);
-  Serial.println(" mb");  
+  } 
 }
