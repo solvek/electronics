@@ -1,6 +1,17 @@
+# Overview
 ![ENC28J60 wiring](IMG_20160306_082824.jpg)
 
-# CO2 quolity
+# Features
+
+ 1. Reads co2 concentration
+ 2. Reads temperature
+ 3. Reads humidity
+ 4. Reads air pressure
+ 5. Sends data via network (UDP protocol)
+ 6. Handles data with [OpenHAB](http://www.openhab.org/)
+ 7. OpenHAB is configured for showing, persisting historical data, building charts, sending notifications (*open window*, *decrease heater* etc)
+
+# CO2 quality
 [How co2 conentration impacts humans (in ukrainian)](https://docs.google.com/document/d/1l87kJx1lqZpuicVIvCt-TA4aJeTVuhVo9qCxow-L0lQ/edit?usp=sharing)
 
 # Used modules
