@@ -1,5 +1,8 @@
 # Overview
-![ENC28J60 wiring](IMG_20160306_082824.jpg)
+
+![General looking](IMG_20160306_082824.jpg)
+
+![OpenHAB screen](openhab.jpg)
 
 # Features
 
