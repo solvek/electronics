@@ -77,10 +77,6 @@ Can measure pressure, temperature and altitude.
 
 ![BMP180 wiring](bmp180_schem.png)
 
-## Voltage stabilizator LM7805CV. [Connection scheme](http://www.ruselectronic.com/news/stabilizatory-naprjazhjenija/)
-
-![input/output](lm7805.jpg)
-
 # OpenHab
 
  * OpenHab default location: `/opt/openhab`
