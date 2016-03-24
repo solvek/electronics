@@ -99,14 +99,17 @@ Group Meteostation  (All)
 
 Number MS_Temperature    "Temperature [%.1f °C]"  <temperature> (Meteostation)
 Number MS_Humidity   "Humidity [%d %%]"  <water> (Meteostation)
-Number MS_Pressure   "Pressure [%.1f mb]" <rain>  (Meteostation)
+Number MS_Pressure   "Pressure [%.1f mb]" <pressure>  (Meteostation)
 
 Group MS_Advanced  (Meteostation)
-Number MS_CO2_Raw   "CO2 raw [%d mV]"  (MS_Advanced)
+Number MS_CO2_Raw   "CO2 raw [%d mV]"  <voltage> (MS_Advanced)
+Number MS_CO2_A   "CO2 Initial Voltage [%.4f  mV]"  (MS_Advanced)
+Switch MS_CO2_Calibrator   "Calibrator"  <multimeter> (MS_Advanced)
+
 String  String_MS_raw     "Raw udp [%s]"   (MS_Advanced) {udp="<[0.0.0.0:*:'REGEX(meteostationZ(.*)Z)']"}
 Number CO2_Raw_Chart_Period   "Chart Period"
 
-Number MS_CO2 "CO2 concentration [%d ppm]" <wind> (Meteostation)
+Number MS_CO2 "CO2 concentration [%d ppm]" <co2> (Meteostation)
 Number CO2_Chart_Period   "CO2 Chart Period"
 ```
 
@@ -142,6 +145,9 @@ sitemap demo label="Solvek Home"
         Chart item=MS_CO2_Raw period=D refresh=30000 visibility=[CO2_Raw_Chart_Period==1]
         Chart item=MS_CO2_Raw period=W refresh=30000 visibility=[CO2_Raw_Chart_Period==2]
 
+        Text item=MS_CO2_A
+        Switch item=MS_CO2_Calibrator  mappings=[ON="Calibrate"]
+
         Text item=String_MS_raw
     }
   }
@@ -164,32 +170,24 @@ import java.lang.Double
 var boolean wasTempNotifSent = false
 var boolean wasCo2NotifSent = false
 
-val double co2_c1 = 375
-val double co2_c2 = 600
-
-val double co2_v1 = 730
-val double co2_v2 = 650
+val double co2_c1 = 400
+var double co2_b = 100
 
 var double co2_z1
-var double co2_z2
 
-var double co2_d
-
-var double co2_a
-var double co2_b
+val double co2_critical = 800
 
 rule "Init everything"
 when
     System started
 then
     co2_z1 = Math::log(co2_c1)
-    co2_z2 = Math::log(co2_c2)
 
-    co2_d = co2_z2 - co2_z1
+    if (MS_CO2_A.state == Uninitialized){
+      postUpdate(MS_CO2_A, 1220)
+    }
 
-    co2_a = (co2_v1*co2_z2-co2_v2*co2_z1)/co2_d
-    co2_b = (co2_v1-co2_v2)/co2_d
-
+   //postUpdate(MS_CO2_Calibrator, ON)
 
 rule "Parse raw meteostation"
 when
@@ -198,8 +196,8 @@ then
   val String ms_val = String_MS_raw.state.toString
 
   // Output received data to csv file
-  var results = executeCommandLine(String::format("/opt/openhab/append.sh %2$s;%1$s /media/data/Temp/meteostation.csv", ms_val, now), 5000)
-  logInfo("CSV_Results", results)
+  // var results = executeCommandLine(String::format("/opt/openhab/append.sh %2$s;%1$s /media/data/Temp/meteostation.csv", ms_val, now), 5000)
+  // logInfo("CSV_Results", results)
 
   val String[] parts = ms_val.split(";")
 
@@ -215,41 +213,80 @@ then
   var Number co2_raw = Integer::parseInt(parts.get(1))
   postUpdate(MS_CO2_Raw, co2_raw)
 
+rule "Calculate co2 concentration"
+when
+    Item MS_CO2_Raw received update
+then
+    var double r = (MS_CO2_A.state as DecimalType) - (MS_CO2_Raw.state as DecimalType)
+    r = (r/co2_b).doubleValue
+
+//    logInfo("Solvek", "Calculating result, exponent="+r+", type="+r.class.getSimpleName)
+
+    r = Math::exp(r).intValue
+
+//    logInfo("Solvek", "Calculated result: "+r)
+
+    postUpdate(MS_CO2, r)
+
+rule "Calibrate CO2 sensor"
+when
+    Item MS_CO2_Calibrator received update
+then
+  // logInfo("Solvek", "Calibrator value: "+MS_CO2_Calibrator.state)
+
+  if (MS_CO2_Calibrator.state == ON){
+    var a = MS_CO2_Raw.state as DecimalType
+
+    a = a + co2_b*co2_z1
+
+    // logInfo("Solvek", "A value: "+a)
+
+    postUpdate(MS_CO2_A, a)
+    postUpdate(MS_CO2_Calibrator, OFF)
+  }
+
+rule "Send message about hight ppm"
+when
+    Item MS_CO2 received update
+then
+  if ((MS_CO2.state > co2_critical) && (!wasCo2NotifSent)) {
+    wasCo2NotifSent = true
+    sendTelegram("bot1", "Refresh the room")
+    createTimer(now.plusHours(1)) [|
+        wasCo2NotifSent = false
+      ]
+  }
+
 rule "Control heating consuming"
 when
   Item MS_Temperature received update
 then
   if ((MS_Temperature.state > 24) && (!wasTempNotifSent)) {
     wasTempNotifSent = true
-    pushover("Do not waste heating energy!")
+    sendTelegram("bot1", "Do not waste heating energy!")
     createTimer(now.plusHours(1)) [|
         wasTempNotifSent = false
       ]
   }
-
-rule "Calculate co2 concentration"
+/*
+rule "Simulate meteostation signal"
 when
-    Item MS_CO2_Raw received update
+  Time cron "0/10 * * * * ?"
 then
-    var double r = co2_a-MS_CO2_Raw.state
-    r = (r/co2_b).doubleValue
-//    logInfo("Solvek", "Calculating result, exponent="+r+", type="+r.class.getSimpleName)
-    r = Math::exp(r).intValue
-//    logInfo("Solvek", "Calculated result: "+r)
+      var co2 = ((MS_CO2_Raw.state  as DecimalType)+10*(Math::random-0.5)).intValue
 
-    postUpdate(MS_CO2, r)
+//      logInfo("MS_Simulate", "Co2 raw: "+co2)
+  var temperature2 = 10*Math::random+15
+  var humidity = (7*Math::random+35).intValue
+  var temperature = temperature2.intValue
+  var pressure = 50*Math::random+900
 
-rule "Send message about hight ppm"
-when
-    Item MS_CO2 received update
-then
-  if ((MS_CO2.state > 600) && (!wasCo2NotifSent)) {
-    wasCo2NotifSent = true
-    pushover("Refresh the room", 2)
-    createTimer(now.plusHours(1)) [|
-        wasCo2NotifSent = false
-      ]
-  }
+  var output =  String::format("4533;%d;%d;%d;%.2f;%.2f", co2, temperature,humidity,temperature2,pressure)
+
+//  logInfo("MS_Simulate", output)
+
+  postUpdate(String_MS_raw, output)
+*/
   ```
 
 ## `rrd4j.persist`
