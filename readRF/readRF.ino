@@ -1,34 +1,15 @@
 #include <RFduinoBLE.h>
 
-struct Parser
-{
-  int maxSignalLength = 255;
-  int upperThreshod;
-};
-
-typedef struct Parser Parser;
-
 #define BUF_SIZE 100
-
-#define STATUS_UNDEFINED -1
-#define STATUS_IDLE 0
-#define STATUS_HIGH 1
-#define STATUS_LOW 2
-
-#define HIGHT_THRESHOLD 500
-#define LONG_PAUSE 5000
-
-byte st = STATUS_UNDEFINED;
 
 char buf[BUF_SIZE];
 String str = String("");
 
-long lastTime, curTime, duration;
+#define MAX_SEGMENTS 1000
 
-int analog;
-bool lastHigh, curHigh;
+int segments[MAX_SEGMENTS];
 
-Parser defaultParser;
+int count;
 
 void setup() {
   Serial.begin(9600);
@@ -44,54 +25,25 @@ void setup() {
 }
 
 void loop() {
-  analog = analogRead(2);
-  lastHigh = curHigh;
-  curHigh = (analog > HIGHT_THRESHOLD);
-  curTime = micros();
+  count = readSignal(2, segments, MAX_SEGMENTS);
   
-  if (st == STATUS_UNDEFINED){
-    st = curHigh ? STATUS_HIGH : STATUS_LOW;
-    lastTime = curTime;
-    return;
-  }
-    
-  duration = curTime - lastTime;
+  if (count < 5) return;
   
-//  Serial.print("Signal: ");  
-//  Serial.print(analog);
-//  Serial.print(", duration: ");
-//  Serial.print(duration); 
-//  Serial.print(", status: ");
-//  Serial.println(st); 
-  
-  if (lastHigh == curHigh){
-    if (st != STATUS_IDLE && duration > LONG_PAUSE){
-      st = STATUS_IDLE;
-      outputCode();
-    }
-    return;
-  }
-  
-  lastTime = curTime;
-  
-  if (st != STATUS_IDLE){
-    str += (lastHigh ? "+" : "-");
-    str += duration;
-  }
-
-  st = curHigh ? STATUS_HIGH : STATUS_LOW;
+  Serial.print("Detected ");
+  Serial.print(count);
+  Serial.println(" segments"); 
+ 
+ outputCode(segments, count); 
 }
 
-void outputCode(){
-  if (str.length() == 0){
-    Serial.println("No code");
-    return;
+void outputCode(int raw[], int s){
+  for(int i=0;i<s;i++){
+    Serial.print(i%2==0 ? "+" : "-");
+    Serial.print(raw[i]);
   }
+  Serial.println();
   
-  Serial.print("New code: ");  
-  Serial.println(str);
-  
-  str = String("");
+//  str = String("");
   
 //    str = String(signal);
 //    str.toCharArray(buf, BUF_SIZE);
@@ -100,9 +52,31 @@ void outputCode(){
 
 }
 
-int readSignal(int analogPin, struct Parser p)
+#define HIGHT_THRESHOLD 100
+#define MAX_READS 255
+#define DELIMITER_DURATION 3000
+
+int readSignal(int analogPin, int raw[], int buffSize)
 {
-  Serial.print("max length: ");
-  Serial.println(p.maxSignalLength);
-  return 10;
+  bool expectHigh = true;
+  int counter, s;
+  long startTime = micros(), endTime;
+  
+  for(int i=0;i<buffSize;i++){
+    for(counter=0;counter<MAX_READS;counter++){
+      s = analogRead(analogPin);
+      if (expectHigh && s<HIGHT_THRESHOLD) break;
+      if (!expectHigh && s>=HIGHT_THRESHOLD) break;
+    }
+    
+    if (counter >= MAX_READS) return i;
+    
+    endTime = micros();
+    raw[i] = (int)(endTime - startTime);
+    startTime = endTime;
+    
+    expectHigh = !expectHigh;
+  }
+  
+  return buffSize;
 }
