@@ -1,14 +1,7 @@
 #include <RFduinoBLE.h>
 
-#define BUF_SIZE 100
-
-char buf[BUF_SIZE];
-String str = String("");
-
-#define MAX_SEGMENTS 1000
-
+#define MAX_SEGMENTS 300
 int segments[MAX_SEGMENTS];
-
 int count;
 
 void setup() {
@@ -19,9 +12,7 @@ void setup() {
   RFduinoBLE.begin();   
  
 
- Serial.println("Initialied."); 
- 
-//  readSignal(2, defaultParser);
+ Serial.println("Initialied.");  
 }
 
 void loop() {
@@ -34,6 +25,9 @@ void loop() {
   Serial.println(" segments"); 
  
  outputCode(segments, count); 
+ 
+ RFduinoBLE.send("Detected", 8);
+ outputCodeToPhone(segments, count);
 }
 
 void outputCode(int raw[], int s){
@@ -42,37 +36,58 @@ void outputCode(int raw[], int s){
     Serial.print(raw[i]);
   }
   Serial.println();
-  
-//  str = String("");
-  
-//    str = String(signal);
-//    str.toCharArray(buf, BUF_SIZE);
-//    springf(buf  
-//   RFduinoBLE.send("Test2", 5);
+}
 
+#define BUF_SIZE 20
+char buf[BUF_SIZE];
+
+#define THRESHOLD_DELIMITER 5000
+#define THRESHOLD_ONE 500
+
+void outputCodeToPhone(int raw[], int s)
+{
+  String str;
+  int pairs = s/2, pos, v,i;
+  
+  while(pos<pairs){
+    for(;pos<pairs && raw[2*pos+1]<THRESHOLD_DELIMITER;pos++);
+    v = 0;
+    for(i=0;i<24;i++){
+      pos++;
+      if (pos>=pairs) return;
+      v *= 2;
+      if (raw[2*pos]>THRESHOLD_ONE) v++;
+    }
+    
+    str = String(v, HEX);
+    i = str.length()+1;
+    str.toCharArray(buf, i);
+    RFduinoBLE.send(buf, i);
+    
+    Serial.print("Decoded: ");
+    Serial.println(v, HEX);
+  }
 }
 
 #define HIGHT_THRESHOLD 100
-#define MAX_READS 255
-#define DELIMITER_DURATION 3000
+#define DELIMITER_DURATION 15000
 
 int readSignal(int analogPin, int raw[], int buffSize)
 {
   bool expectHigh = true;
-  int counter, s;
-  long startTime = micros(), endTime;
+  int s;
+  long startTime = micros(), endTime, duration;
   
   for(int i=0;i<buffSize;i++){
-    for(counter=0;counter<MAX_READS;counter++){
+    do{
       s = analogRead(analogPin);
-      if (expectHigh && s<HIGHT_THRESHOLD) break;
-      if (!expectHigh && s>=HIGHT_THRESHOLD) break;
-    }
+      endTime = micros();
+      duration = endTime - startTime;
+      if (duration > DELIMITER_DURATION) return i;
+    } while((expectHigh && s>=HIGHT_THRESHOLD)
+      || (!expectHigh && s<HIGHT_THRESHOLD));
     
-    if (counter >= MAX_READS) return i;
-    
-    endTime = micros();
-    raw[i] = (int)(endTime - startTime);
+    raw[i] = (int)duration;
     startTime = endTime;
     
     expectHigh = !expectHigh;
