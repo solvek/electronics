@@ -16,6 +16,8 @@
 
 #define LED_PIN 13
 
+#define INPUT_PIN 2
+
 void setup() {
  Serial.begin(9600);
  pinMode(LED_PIN, OUTPUT);
@@ -32,7 +34,7 @@ byte bits[KERUI_BITS];
 void loop() {
  digitalWrite(LED_PIN, HIGH); 
  Serial.println("Waiting for a result...");
- int result = keruiReadRow(A0, 2, bits, row);
+ int result = keruiReadRow(INPUT_PIN, 2, bits, row);
  digitalWrite(LED_PIN, LOW);
  if (result == KERUI_RESULT_SUCCESS){
    Serial.print("Code: ");
@@ -48,10 +50,10 @@ void loop() {
    }
    Serial.println();   
  } 
- else {
-   Serial.print("Error: ");
-   Serial.println(result);
- }
+// else {
+//   Serial.print("Error: ");
+//   Serial.println(result);
+// }
 }
 
 /**
